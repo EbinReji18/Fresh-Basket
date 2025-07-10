@@ -100,7 +100,7 @@ const AddAddress = () => {
 
              </form>
             </div>
-            <img className='md:mr-16 mb-16 md:mt-0' src={assets.add_address_iamge} alt="Add Address" />
+            <img className='w-full md:w-[400px] max-h-[250px] object-cover rounded-xl md:mr-16 mb-10' src={assets.add_address_iamge} alt="Add Address" />
       </div>
     </div>
   )

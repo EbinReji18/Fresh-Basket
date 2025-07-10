@@ -18,18 +18,18 @@ const port = process.env.PORT || 4000;
 await connectDB();
 await connectCloudinary();
 
-// Allow Multiple Origins
-const allowedOrigins = ['http://localhost:5173'];
-
-//  Middleware configuration
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors({ origin: allowedOrigins, credentials: true }));
-
-//  Stripe Webhook must use raw body - placed AFTER .json middleware
+//  STEP 1: Handle Stripe Webhook FIRST — before any middleware
 app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebhooks);
 
-//  API Routes
+//  STEP 2: THEN apply middlewares
+app.use(express.json());
+app.use(cookieParser());
+
+// Allow Multiple Origins
+const allowedOrigins = ['http://localhost:5173'];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
+
+//  STEP 3: Register API Routes
 app.get('/', (req, res) => res.send("API is Working"));
 app.use('/api/user', userRouter);
 app.use('/api/seller', sellerRouter);
@@ -38,7 +38,7 @@ app.use('/api/cart', cartRouter);
 app.use('/api/address', addressRouter);
 app.use('/api/order', orderRouter);
 
-//  Start Server
+//  STEP 4: Start Server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
